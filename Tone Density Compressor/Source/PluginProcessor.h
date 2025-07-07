@@ -59,7 +59,7 @@ public:
 
     juce::AudioProcessorValueTreeState parameters;
 
-    foleys::MagicProcessorState magicState { *this, parameters };
+
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 

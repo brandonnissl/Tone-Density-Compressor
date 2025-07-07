@@ -54,7 +54,6 @@ GlobalControlComponent::GlobalControlComponent()
     oversamplingLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     midSideLabel.setColour(juce::Label::textColourId, juce::Colours::white);
 
-
     oversamplingBox.addItem("1x", 1);
     oversamplingBox.addItem("2x", 2);
     oversamplingBox.addItem("4x", 3);

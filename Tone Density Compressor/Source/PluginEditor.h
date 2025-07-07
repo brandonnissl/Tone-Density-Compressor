@@ -28,5 +28,15 @@ public:
     juce::AudioBuffer<float> analysisBuffer;
 
 private:
+    // This reference is provided as a quick way for your editor to
+    // access the processor object that created it.
+    ToneDensityCompressorAudioProcessor& audioProcessor;
+    LookAndFeel_TDC customLookAndFeel;
+    HeaderComponent header;
+    SpectralFlatnessGraphComponent spectralGraph;
+    BandControlComponent bandsControl;
+    GlobalControlComponent globalControl;
+    IOAndDensityMeterComponent ioMeters;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneDensityCompressorAudioProcessorEditor)
 };
