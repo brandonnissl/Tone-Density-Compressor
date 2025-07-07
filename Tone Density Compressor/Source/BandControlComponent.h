@@ -39,7 +39,7 @@ public:
     }
 
     void paint (juce::Graphics& g) override {}
-    void resized() override {}
+    void resized() override;
     void attachParameters(juce::AudioProcessorValueTreeState& params)
     {
         lowBand.attachParameters(params, "low");
