@@ -17,6 +17,9 @@ private:
     juce::Slider sensitivityKnob;
     juce::Slider compressionKnob;
     juce::ToggleButton bypassButton;
+    juce::Label sensitivityLabel {"", "Sensitivity"};
+    juce::Label compressionLabel {"", "Compression"};
+    juce::Label bypassLabel {"", "Bypass"};
 
     juce::String bandName;
 

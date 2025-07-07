@@ -20,7 +20,8 @@
 //==============================================================================
 /**
 */
-class ToneDensityCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor
+class ToneDensityCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                                   private juce::Timer
 {
 public:
     ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor&);
@@ -29,6 +30,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+
+    void timerCallback() override;
 
 private:
     // This reference is provided as a quick way for your editor to

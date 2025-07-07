@@ -9,3 +9,14 @@
 */
 
 #include "BandControlComponent.h"
+
+void BandControlComponent::resized()
+{
+    auto area = getLocalBounds();
+    auto bandWidth = area.getWidth() / 4;
+
+    lowBand.setBounds(area.removeFromLeft(bandWidth));
+    midBand.setBounds(area.removeFromLeft(bandWidth));
+    highBand.setBounds(area.removeFromLeft(bandWidth));
+    airBand.setBounds(area);
+}
