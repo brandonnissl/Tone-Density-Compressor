@@ -45,6 +45,7 @@ GlobalControlComponent::GlobalControlComponent()
     autoGainLabel.setJustificationType(juce::Justification::centred);
     oversamplingLabel.setJustificationType(juce::Justification::centred);
     midSideLabel.setJustificationType(juce::Justification::centred);
+
     mixLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     outputLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     linkLabel.setColour(juce::Label::textColourId, juce::Colours::white);
@@ -120,7 +121,6 @@ void GlobalControlComponent::resized()
     auto osArea = area.removeFromLeft(knobWidth);
     oversamplingBox.setBounds(osArea.removeFromTop(knobWidth / 2));
     oversamplingLabel.setBounds(osArea);
-
 
     auto msArea = area;
     midSideButton.setBounds(msArea.removeFromTop(knobWidth));
