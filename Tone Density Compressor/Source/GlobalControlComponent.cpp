@@ -20,7 +20,6 @@ GlobalControlComponent::GlobalControlComponent()
     oversamplingBox.setLookAndFeel(&customLookAndFeel);
     midSideButton.setLookAndFeel(&customLookAndFeel);
 
-
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(outputKnob);
     addAndMakeVisible(linkButton);
@@ -28,7 +27,7 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(autoGainButton);
     addAndMakeVisible(oversamplingBox);
     addAndMakeVisible(midSideButton);
-
+=
     addAndMakeVisible(mixLabel);
     addAndMakeVisible(outputLabel);
     addAndMakeVisible(linkLabel);
