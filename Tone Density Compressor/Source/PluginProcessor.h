@@ -74,5 +74,7 @@ private:
 
     juce::dsp::Oversampling<float> oversampler { 2, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true };
 
+    juce::dsp::Oversampling<float> oversampler { 2, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneDensityCompressorAudioProcessor)
 };

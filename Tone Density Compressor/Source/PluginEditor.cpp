@@ -22,12 +22,14 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
 
     // Set plugin window size
     setSize (1200, 600);
+
 }
 
 ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorEditor()
 {
     setLookAndFeel(nullptr);
     stopTimer();
+
 }
 
 //==============================================================================
@@ -59,4 +61,5 @@ void ToneDensityCompressorAudioProcessorEditor::resized()
 void ToneDensityCompressorAudioProcessorEditor::timerCallback()
 {
     spectralGraph.pushNewData(audioProcessor.getAnalysisBuffer());
+
 }
