@@ -57,8 +57,9 @@ bool ToneDensityCompressorAudioProcessor::isBusesLayoutSupported (const BusesLay
 void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto numSamples = buffer.getNumSamples();
+    const int totalNumInputChannels = getTotalNumInputChannels();
+    const int totalNumOutputChannels = getTotalNumOutputChannels();
+    const int numSamples = buffer.getNumSamples();
     const int numSamplesToCopy = juce::jmin(buffer.getNumSamples(), 512);
 
     analysisBuffer.setSize(buffer.getNumChannels(), numSamplesToCopy);
@@ -77,6 +78,9 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         buffer.applyGain(ch, 0, numSamples, outputGain);
         analysisBuffer.copyFrom(ch, 0, buffer, ch, 0, numSamplesToCopy);
     }
+
+    for (int ch = totalNumInputChannels; ch < totalNumOutputChannels; ++ch)
+        buffer.clear(ch, 0, numSamples);
 }
 
 
