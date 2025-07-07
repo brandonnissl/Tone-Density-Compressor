@@ -23,6 +23,7 @@ public:
         setColour (juce::ToggleButton::textColourId, juce::Colours::white);
         setColour (juce::ComboBox::backgroundColourId, juce::Colours::black);
         setColour (juce::ComboBox::textColourId, juce::Colours::white);
+        setColour (juce::Label::textColourId, juce::Colours::white);
     }
 
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
