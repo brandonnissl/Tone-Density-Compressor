@@ -19,6 +19,9 @@ private:
     juce::Slider mixKnob;
     juce::Slider outputKnob;
     juce::ToggleButton linkButton;
+    juce::Label mixLabel {"", "Mix"};
+    juce::Label outputLabel {"", "Output"};
+    juce::Label linkLabel {"", "Link"};
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mixAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outputAttachment;

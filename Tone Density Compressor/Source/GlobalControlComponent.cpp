@@ -19,6 +19,13 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(outputKnob);
     addAndMakeVisible(linkButton);
+    addAndMakeVisible(mixLabel);
+    addAndMakeVisible(outputLabel);
+    addAndMakeVisible(linkLabel);
+
+    mixLabel.setJustificationType(juce::Justification::centred);
+    outputLabel.setJustificationType(juce::Justification::centred);
+    linkLabel.setJustificationType(juce::Justification::centred);
 }
 
 GlobalControlComponent::~GlobalControlComponent()
@@ -41,7 +48,15 @@ void GlobalControlComponent::resized()
     auto area = getLocalBounds().reduced(10);
     auto knobWidth = area.getWidth() / 3;
 
-    mixKnob.setBounds(area.removeFromLeft(knobWidth));
-    outputKnob.setBounds(area.removeFromLeft(knobWidth));
-    linkButton.setBounds(area);
+    auto mixArea = area.removeFromLeft(knobWidth);
+    mixKnob.setBounds(mixArea.removeFromTop(knobWidth));
+    mixLabel.setBounds(mixArea);
+
+    auto outArea = area.removeFromLeft(knobWidth);
+    outputKnob.setBounds(outArea.removeFromTop(knobWidth));
+    outputLabel.setBounds(outArea);
+
+    auto linkArea = area;
+    linkButton.setBounds(linkArea.removeFromTop(knobWidth));
+    linkLabel.setBounds(linkArea);
 }

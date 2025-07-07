@@ -5,6 +5,8 @@
 ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    setLookAndFeel(&customLookAndFeel);
+
     // Attach parameters via public method
     bandsControl.attachParameters(audioProcessor.parameters);
     globalControl.attachParameters(audioProcessor.parameters);
@@ -22,6 +24,7 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
 
 ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==============================================================================
