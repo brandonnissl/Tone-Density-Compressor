@@ -15,11 +15,17 @@
 //==============================================================================
 /**
 */
+
 class ToneDensityCompressorAudioProcessorEditor  : public foleys::MagicPluginEditor
+
 {
 public:
     ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor&);
     ~ToneDensityCompressorAudioProcessorEditor() override = default;
+
+    void timerCallback() override;
+
+    juce::AudioBuffer<float> analysisBuffer;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneDensityCompressorAudioProcessorEditor)

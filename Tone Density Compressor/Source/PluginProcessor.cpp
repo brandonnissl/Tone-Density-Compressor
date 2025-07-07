@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+
 #include <foleys_gui_magic/foleys_gui_magic.h>
+
 //==============================================================================
 ToneDensityCompressorAudioProcessor::ToneDensityCompressorAudioProcessor()
     : AudioProcessor (BusesProperties().withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -64,6 +66,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     const int totalNumInputChannels = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int channelsToProcess = juce::jmax (buffer.getNumChannels(), totalNumOutputChannels);
+
     const int numSamples = buffer.getNumSamples();
     const int numSamplesToCopy = juce::jmin(buffer.getNumSamples(), 512);
 
@@ -86,6 +89,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     const int oversampleChoice = (int) parameters.getRawParameterValue("oversampling")->load();
     const bool midSide = parameters.getRawParameterValue("midSide")->load() > 0.5f;
 
+
     if (midSide && totalNumInputChannels >= 2)
     {
         for (int i = 0; i < numSamples; ++i)
@@ -104,31 +108,9 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
             juce::dsp::AudioBlock<float> block (buffer);
             oversampler.processSamplesUp (block);
 
-            auto context = juce::dsp::ProcessContextReplacing<float> (block);
-            if (! lowBypass)
-                lowBandFilter.process (context);
-            if (! midBypass)
-                midBandFilter.process (context);
-            if (! highBypass)
-                highBandFilter.process (context);
-            if (! airBypass)
-                airBandFilter.process (context);
-
             oversampler.processSamplesDown (block);
         }
-        else
-        {
-            juce::dsp::AudioBlock<float> block (buffer);
-            auto context = juce::dsp::ProcessContextReplacing<float> (block);
-            if (! lowBypass)
-                lowBandFilter.process (context);
-            if (! midBypass)
-                midBandFilter.process (context);
-            if (! highBypass)
-                highBandFilter.process (context);
-            if (! airBypass)
-                airBandFilter.process (context);
-        }
+
 
         for (int ch = 0; ch < channelsToProcess; ++ch)
             buffer.applyGain(ch, 0, numSamples, outputGain);
@@ -160,11 +142,11 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         float dryRMS = 0.0f;
         float wetRMS = 0.0f;
         for (int ch = 0; ch < channelsToProcess; ++ch)
+
         {
             dryRMS += dryBuffer.getRMSLevel(ch, 0, numSamples);
             wetRMS += buffer.getRMSLevel(ch, 0, numSamples);
-        }
-        dryRMS /= static_cast<float> (channelsToProcess);
+        }       dryRMS /= static_cast<float> (channelsToProcess);
         wetRMS /= static_cast<float> (channelsToProcess);
 
         if (wetRMS > 0.0f)
@@ -172,6 +154,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     }
 
     for (int ch = channelsToProcess; ch < totalNumOutputChannels; ++ch)
+
         buffer.clear(ch, 0, numSamples);
 }
 
@@ -214,6 +197,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout ToneDensityCompressorAudioPr
     params.push_back(std::make_unique<juce::AudioParameterChoice>("oversampling", "Oversampling", osChoices, 0));
     params.push_back(std::make_unique<juce::AudioParameterBool>("midSide", "Mid/Side", false));
     params.push_back(std::make_unique<juce::AudioParameterBool>("link", "Link", false));
+
 
     auto addBandParams = [&params](const juce::String& prefix) {
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Sensitivity", prefix + " Sensitivity", 0.0f, 1.0f, 0.5f));
