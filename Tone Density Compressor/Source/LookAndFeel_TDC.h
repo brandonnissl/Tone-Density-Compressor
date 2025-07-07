@@ -23,23 +23,10 @@ public:
         setColour (juce::ToggleButton::textColourId, juce::Colours::white);
         setColour (juce::ComboBox::backgroundColourId, juce::Colours::black);
         setColour (juce::ComboBox::textColourId, juce::Colours::white);
+        setColour (juce::Label::textColourId, juce::Colours::white);
     }
 
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
                             float sliderPosProportional, float rotaryStartAngle,
                             float rotaryEndAngle, juce::Slider& slider) override;
-
-    void drawToggleButton (juce::Graphics& g, juce::ToggleButton& button,
-                           bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
-    {
-        auto bounds = button.getLocalBounds().toFloat();
-        g.setColour (button.getToggleState() ? juce::Colours::aqua : juce::Colours::darkgrey);
-        g.fillEllipse (bounds);
-
-        if (shouldDrawButtonAsHighlighted || shouldDrawButtonAsDown)
-        {
-            g.setColour (juce::Colours::white.withAlpha (0.2f));
-            g.drawEllipse (bounds, 2.0f);
-        }
-    }
 };
