@@ -20,16 +20,19 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(outputKnob);
     addAndMakeVisible(linkButton);
+  
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(mixLabel);
     addAndMakeVisible(outputLabel);
     addAndMakeVisible(linkLabel);
     addAndMakeVisible(bypassLabel);
 
+
     mixLabel.setJustificationType(juce::Justification::centred);
     outputLabel.setJustificationType(juce::Justification::centred);
     linkLabel.setJustificationType(juce::Justification::centred);
     bypassLabel.setJustificationType(juce::Justification::centred);
+
 }
 
 GlobalControlComponent::~GlobalControlComponent()
@@ -70,4 +73,5 @@ void GlobalControlComponent::resized()
     auto bypassArea = area;
     bypassButton.setBounds(bypassArea.removeFromTop(knobWidth));
     bypassLabel.setBounds(bypassArea);
+
 }
