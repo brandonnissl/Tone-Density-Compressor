@@ -21,7 +21,7 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
     addAndMakeVisible(ioMeters);
 
     // Set plugin window size
-    setSize (800, 450);
+    setSize (1000, 500);
 }
 
 ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorEditor()
