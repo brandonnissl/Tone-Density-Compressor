@@ -28,6 +28,7 @@ ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorE
 {
     setLookAndFeel(nullptr);
     stopTimer();
+
 }
 
 //==============================================================================

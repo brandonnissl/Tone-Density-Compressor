@@ -112,6 +112,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         for (int i = 0; i < numSamples; ++i)
             wet[i] = wet[i] * mix + dry[i] * (1.0f - mix);
 
+
         analysisBuffer.copyFrom(ch, 0, buffer, ch, 0, numSamplesToCopy);
     }
 
@@ -185,6 +186,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout ToneDensityCompressorAudioPr
     params.push_back(std::make_unique<juce::AudioParameterChoice>("oversampling", "Oversampling", osChoices, 0));
     params.push_back(std::make_unique<juce::AudioParameterBool>("midSide", "Mid/Side", false));
     params.push_back(std::make_unique<juce::AudioParameterBool>("link", "Link", false));
+
 
     auto addBandParams = [&params](const juce::String& prefix) {
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Sensitivity", prefix + " Sensitivity", 0.0f, 1.0f, 0.5f));

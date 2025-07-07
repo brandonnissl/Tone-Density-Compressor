@@ -20,6 +20,7 @@ GlobalControlComponent::GlobalControlComponent()
     oversamplingBox.setLookAndFeel(&customLookAndFeel);
     midSideButton.setLookAndFeel(&customLookAndFeel);
 
+
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(outputKnob);
     addAndMakeVisible(linkButton);
@@ -27,6 +28,7 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(autoGainButton);
     addAndMakeVisible(oversamplingBox);
     addAndMakeVisible(midSideButton);
+
     addAndMakeVisible(mixLabel);
     addAndMakeVisible(outputLabel);
     addAndMakeVisible(linkLabel);
@@ -34,6 +36,7 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(autoGainLabel);
     addAndMakeVisible(oversamplingLabel);
     addAndMakeVisible(midSideLabel);
+
 
     mixLabel.setJustificationType(juce::Justification::centred);
     outputLabel.setJustificationType(juce::Justification::centred);
@@ -47,6 +50,7 @@ GlobalControlComponent::GlobalControlComponent()
     oversamplingBox.addItem("2x", 2);
     oversamplingBox.addItem("4x", 3);
     oversamplingBox.setSelectedId(1);
+
 }
 
 GlobalControlComponent::~GlobalControlComponent()
@@ -58,6 +62,7 @@ GlobalControlComponent::~GlobalControlComponent()
     autoGainButton.setLookAndFeel(nullptr);
     oversamplingBox.setLookAndFeel(nullptr);
     midSideButton.setLookAndFeel(nullptr);
+
 }
 
 void GlobalControlComponent::attachParameters(juce::AudioProcessorValueTreeState& params)
@@ -76,12 +81,14 @@ void GlobalControlComponent::attachParameters(juce::AudioProcessorValueTreeState
         params, "midSide", midSideButton);
     linkAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         params, "link", linkButton);
+
 }
 
 void GlobalControlComponent::resized()
 {
     auto area = getLocalBounds().reduced(10);
     auto knobWidth = area.getWidth() / 7;
+
 
     auto mixArea = area.removeFromLeft(knobWidth);
     mixKnob.setBounds(mixArea.removeFromTop(knobWidth));
@@ -110,4 +117,5 @@ void GlobalControlComponent::resized()
     auto msArea = area;
     midSideButton.setBounds(msArea.removeFromTop(knobWidth));
     midSideLabel.setBounds(msArea);
+
 }
