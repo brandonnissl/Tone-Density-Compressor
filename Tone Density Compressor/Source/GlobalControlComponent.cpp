@@ -45,6 +45,14 @@ GlobalControlComponent::GlobalControlComponent()
     autoGainLabel.setJustificationType(juce::Justification::centred);
     oversamplingLabel.setJustificationType(juce::Justification::centred);
     midSideLabel.setJustificationType(juce::Justification::centred);
+    mixLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    outputLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    linkLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    bypassLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    autoGainLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    oversamplingLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    midSideLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+
 
     oversamplingBox.addItem("1x", 1);
     oversamplingBox.addItem("2x", 2);
@@ -89,7 +97,6 @@ void GlobalControlComponent::resized()
     auto area = getLocalBounds().reduced(10);
     auto knobWidth = area.getWidth() / 7;
 
-
     auto mixArea = area.removeFromLeft(knobWidth);
     mixKnob.setBounds(mixArea.removeFromTop(knobWidth));
     mixLabel.setBounds(mixArea);
@@ -113,6 +120,7 @@ void GlobalControlComponent::resized()
     auto osArea = area.removeFromLeft(knobWidth);
     oversamplingBox.setBounds(osArea.removeFromTop(knobWidth / 2));
     oversamplingLabel.setBounds(osArea);
+
 
     auto msArea = area;
     midSideButton.setBounds(msArea.removeFromTop(knobWidth));

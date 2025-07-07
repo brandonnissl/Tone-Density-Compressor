@@ -15,6 +15,8 @@ HeaderComponent::HeaderComponent()
     logoLabel.setText("Tone Density Compressor", juce::dontSendNotification);
     logoLabel.setFont(juce::Font(18.0f, juce::Font::bold));
     logoLabel.setJustificationType(juce::Justification::centredLeft);
+    logoLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+
 
     addAndMakeVisible(logoLabel);
     addAndMakeVisible(presetBox);
