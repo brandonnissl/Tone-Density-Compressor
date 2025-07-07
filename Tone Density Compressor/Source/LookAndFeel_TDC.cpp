@@ -19,26 +19,25 @@ void LookAndFeel_TDC::drawRotarySlider (juce::Graphics& g, int x, int y, int wid
     const float centreY = y + height * 0.5f;
     const float angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
-    // Background circle
-    g.setColour (juce::Colours::darkslategrey);
-    g.fillEllipse (centreX - radius, centreY - radius, radius * 2.0f, radius * 2.0f);
+    juce::Colour baseColour = juce::Colours::darkslategrey;
+    juce::Colour highlight = juce::Colours::aqua;
 
-    // Glow ring (outer ring)
-    g.setColour (juce::Colours::cyan.withAlpha (0.2f));
-    g.drawEllipse (centreX - radius - 2.0f, centreY - radius - 2.0f,
-                   (radius + 2.0f) * 2.0f, (radius + 2.0f) * 2.0f, 2.0f);
+    juce::Path knob;
+    knob.addEllipse (centreX - radius, centreY - radius, radius * 2.0f, radius * 2.0f);
+    g.setColour (baseColour);
+    g.fillPath (knob);
 
-    // Knob indicator arc
+    g.setColour (baseColour.brighter(0.2f));
+    g.strokePath (knob, juce::PathStrokeType (1.0f));
+
     juce::Path valueArc;
     valueArc.addCentredArc (centreX, centreY, radius - 4.0f, radius - 4.0f,
                             0.0f, rotaryStartAngle, angle, true);
-
-    g.setColour (juce::Colours::cyan);
+    g.setColour (highlight);
     g.strokePath (valueArc, juce::PathStrokeType (3.0f));
 
-    // Numeric value (centered inside knob)
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::Font (14.0f, juce::Font::bold));
-    auto valueString = juce::String (slider.getValue(), 1);
-    g.drawFittedText (valueString, x, y, width, height, juce::Justification::centred, 1);
+    juce::Point<float> pointer (centreX + std::cos(angle) * (radius - 6.0f),
+                               centreY + std::sin(angle) * (radius - 6.0f));
+    g.setColour (highlight);
+    g.fillEllipse (pointer.x - 3.0f, pointer.y - 3.0f, 6.0f, 6.0f);
 }
