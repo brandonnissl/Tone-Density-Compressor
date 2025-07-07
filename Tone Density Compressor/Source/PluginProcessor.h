@@ -9,7 +9,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include <foleys_gui_magic/foleys_gui_magic.h>
 
 //==============================================================================
 /**
@@ -59,7 +58,6 @@ public:
 
     juce::AudioProcessorValueTreeState parameters;
 
-
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     const juce::AudioBuffer<float>& getAnalysisBuffer() const { return analysisBuffer; }
@@ -73,6 +71,8 @@ private:
 
     juce::AudioBuffer<float> dryBuffer;  // For dry/wet mixing
     juce::AudioBuffer<float> analysisBuffer; // Captures data for the spectral graph
+
+    juce::dsp::Oversampling<float> oversampler { 2, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true };
 
     juce::dsp::Oversampling<float> oversampler { 2, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true };
 

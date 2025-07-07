@@ -1,12 +1,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
 //==============================================================================
 ToneDensityCompressorAudioProcessor::ToneDensityCompressorAudioProcessor()
     : AudioProcessor (BusesProperties().withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                                          .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
-      parameters (*this, nullptr, "Parameters", createParameterLayout()),
-      magicState (*this, parameters)
+      parameters (*this, nullptr, "Parameters", createParameterLayout())
 {
     oversampler.reset();
 }
@@ -75,11 +73,10 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
 
     dryBuffer.makeCopyOf(buffer);
 
-    const bool lowBypass  = parameters.getRawParameterValue("lowBypass")->load()  > 0.5f;
-    const bool midBypass  = parameters.getRawParameterValue("midBypass")->load()  > 0.5f;
-    const bool highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
-    const bool airBypass  = parameters.getRawParameterValue("airBypass")->load()  > 0.5f;
-
+    auto lowBypass = parameters.getRawParameterValue("lowBypass")->load() > 0.5f;
+    auto midBypass = parameters.getRawParameterValue("midBypass")->load() > 0.5f;
+    auto highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
+    auto airBypass = parameters.getRawParameterValue("airBypass")->load() > 0.5f;
 
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
     const float outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
@@ -87,6 +84,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     const bool autoGain = parameters.getRawParameterValue("autoGain")->load() > 0.5f;
     const int oversampleChoice = (int) parameters.getRawParameterValue("oversampling")->load();
     const bool midSide = parameters.getRawParameterValue("midSide")->load() > 0.5f;
+
 
     if (midSide && totalNumInputChannels >= 2)
     {
@@ -105,31 +103,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         {
             juce::dsp::AudioBlock<float> block (buffer);
             oversampler.processSamplesUp (block);
-
-            auto context = juce::dsp::ProcessContextReplacing<float> (block);
-            if (! lowBypass)
-                lowBandFilter.process (context);
-            if (! midBypass)
-                midBandFilter.process (context);
-            if (! highBypass)
-                highBandFilter.process (context);
-            if (! airBypass)
-                airBandFilter.process (context);
-
             oversampler.processSamplesDown (block);
-        }
-        else
-        {
-            juce::dsp::AudioBlock<float> block (buffer);
-            auto context = juce::dsp::ProcessContextReplacing<float> (block);
-            if (! lowBypass)
-                lowBandFilter.process (context);
-            if (! midBypass)
-                midBandFilter.process (context);
-            if (! highBypass)
-                highBandFilter.process (context);
-            if (! airBypass)
-                airBandFilter.process (context);
         }
 
         for (int ch = 0; ch < channelsToProcess; ++ch)
@@ -163,13 +137,15 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         float dryRMS = 0.0f;
         float wetRMS = 0.0f;
         for (int ch = 0; ch < channelsToProcess; ++ch)
+
         {
             dryRMS += dryBuffer.getRMSLevel(ch, 0, numSamples);
             wetRMS += buffer.getRMSLevel(ch, 0, numSamples);
         }
-        dryRMS /= static_cast<float> (channelsToProcess);
 
-        wetRMS /= static_cast<float> (channelsToProcess);
+        dryRMS /= static_cast<float> (totalNumInputChannels);
+        wetRMS /= static_cast<float> (totalNumInputChannels);
+
 
         if (wetRMS > 0.0f)
             buffer.applyGain(dryRMS / wetRMS);
@@ -186,7 +162,7 @@ bool ToneDensityCompressorAudioProcessor::hasEditor() const { return true; }
 
 juce::AudioProcessorEditor* ToneDensityCompressorAudioProcessor::createEditor()
 {
-    return magicState.createEditor();
+    return new ToneDensityCompressorAudioProcessorEditor (*this);
 }
 
 //==============================================================================

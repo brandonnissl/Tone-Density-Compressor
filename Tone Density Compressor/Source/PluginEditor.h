@@ -9,19 +9,27 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include <foleys_gui_magic/foleys_gui_magic.h>
+#include "HeaderComponent.h"
 #include "PluginProcessor.h"
+#include "SpectralFlatnessGraphComponent.h"
+#include "BandControlComponent.h"
+#include "GlobalControlComponent.h"
+#include "IOAndDensityMeterComponent.h"
+#include "LookAndFeel_TDC.h"
 
 //==============================================================================
 /**
 */
-
-class ToneDensityCompressorAudioProcessorEditor  : public foleys::MagicPluginEditor
-
+class ToneDensityCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                                   private juce::Timer
 {
 public:
     ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor&);
-    ~ToneDensityCompressorAudioProcessorEditor() override = default;
+    ~ToneDensityCompressorAudioProcessorEditor() override;
+
+    //==============================================================================
+    void paint (juce::Graphics&) override;
+    void resized() override;
 
     void timerCallback() override;
 
@@ -37,6 +45,7 @@ private:
     BandControlComponent bandsControl;
     GlobalControlComponent globalControl;
     IOAndDensityMeterComponent ioMeters;
-
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneDensityCompressorAudioProcessorEditor)
 };
