@@ -1,9 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
 ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : foleys::MagicPluginEditor (p.magicState)
 {
     bandsControl.attachParameters(audioProcessor.parameters);
     globalControl.attachParameters(audioProcessor.parameters);
@@ -15,10 +14,12 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
     addAndMakeVisible(ioMeters);
 
     setSize (800, 450);
+
 }
 
-ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorEditor()
+void ToneDensityCompressorAudioProcessorEditor::timerCallback()
 {
+
 }
 
 //==============================================================================
@@ -45,4 +46,5 @@ void ToneDensityCompressorAudioProcessorEditor::resized()
     bandsControl.setBounds(bounds.removeFromTop(bandsHeight));
     globalControl.setBounds(bounds.removeFromTop(globalHeight));
     ioMeters.setBounds(bounds.removeFromTop(metersHeight));
+
 }

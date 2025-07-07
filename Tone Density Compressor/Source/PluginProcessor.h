@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <foleys_gui_magic/foleys_gui_magic.h>
 
 //==============================================================================
 /**
@@ -57,6 +58,7 @@ public:
     //==============================================================================
 
     juce::AudioProcessorValueTreeState parameters;
+
 
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
