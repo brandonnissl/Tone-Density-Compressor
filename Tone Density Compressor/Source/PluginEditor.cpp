@@ -7,9 +7,3 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
     setResizeLimits (400, 300, 1200, 800);
 
 }
-
-void ToneDensityCompressorAudioProcessorEditor::timerCallback()
-{
-    spectralGraph.pushNewData(audioProcessor.getAnalysisBuffer());
-
-}
