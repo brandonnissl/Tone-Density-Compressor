@@ -72,10 +72,13 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
 
     auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
     auto outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
+    bool bypass = parameters.getRawParameterValue("bypass")->load() > 0.5f;
 
     for (int ch = 0; ch < totalNumInputChannels; ++ch)
     {
-        buffer.applyGain(ch, 0, numSamples, outputGain);
+        if (! bypass)
+            buffer.applyGain(ch, 0, numSamples, outputGain);
+
         analysisBuffer.copyFrom(ch, 0, buffer, ch, 0, numSamplesToCopy);
     }
 
@@ -116,6 +119,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout ToneDensityCompressorAudioPr
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("mix", "Mix", 0.0f, 100.0f, 50.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("output", "Output", -24.0f, 24.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("bypass", "Bypass", false));
 
     auto addBandParams = [&params](const juce::String& prefix) {
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Sensitivity", prefix + " Sensitivity", 0.0f, 1.0f, 0.5f));

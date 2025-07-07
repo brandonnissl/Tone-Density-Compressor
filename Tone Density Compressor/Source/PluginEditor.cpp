@@ -7,6 +7,8 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
 {
     setLookAndFeel(&customLookAndFeel);
 
+    startTimerHz(30);
+
     // Attach parameters via public method
     bandsControl.attachParameters(audioProcessor.parameters);
     globalControl.attachParameters(audioProcessor.parameters);
@@ -25,6 +27,8 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
 ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorEditor()
 {
     setLookAndFeel(nullptr);
+    stopTimer();
+
 }
 
 //==============================================================================
@@ -51,4 +55,9 @@ void ToneDensityCompressorAudioProcessorEditor::resized()
     bandsControl.setBounds(bounds.removeFromTop(bandsHeight));
     globalControl.setBounds(bounds.removeFromTop(globalHeight));
     ioMeters.setBounds(bounds.removeFromTop(metersHeight));
+}
+
+void ToneDensityCompressorAudioProcessorEditor::timerCallback()
+{
+    spectralGraph.pushNewData(analysisBuffer);
 }
