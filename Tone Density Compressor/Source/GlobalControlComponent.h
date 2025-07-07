@@ -31,13 +31,6 @@ private:
     juce::Label oversamplingLabel {"", "OS"};
     juce::Label midSideLabel {"", "M/S"};
 
-    juce::ToggleButton bypassButton;
-    juce::Label mixLabel {"", "Mix"};
-    juce::Label outputLabel {"", "Output"};
-    juce::Label linkLabel {"", "Link"};
-    juce::Label bypassLabel {"", "Bypass"};
-
-
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mixAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outputAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
