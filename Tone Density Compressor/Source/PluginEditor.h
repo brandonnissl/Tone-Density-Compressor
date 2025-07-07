@@ -16,6 +16,7 @@
 /**
 */
 class ToneDensityCompressorAudioProcessorEditor  : public foleys::MagicPluginEditor
+
 {
 public:
     ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor&);

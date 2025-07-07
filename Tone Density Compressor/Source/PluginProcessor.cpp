@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "../foleys_gui_magic/foleys_gui_magic.h"
+
 //==============================================================================
 ToneDensityCompressorAudioProcessor::ToneDensityCompressorAudioProcessor()
     : AudioProcessor (BusesProperties().withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -64,6 +65,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     const int totalNumInputChannels = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int channelsToProcess = juce::jmax (buffer.getNumChannels(), totalNumOutputChannels);
+
     const int numSamples = buffer.getNumSamples();
     const int numSamplesToCopy = juce::jmin(buffer.getNumSamples(), 512);
 
@@ -78,6 +80,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
     const bool midBypass  = parameters.getRawParameterValue("midBypass")->load()  > 0.5f;
     const bool highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
     const bool airBypass  = parameters.getRawParameterValue("airBypass")->load()  > 0.5f;
+
 
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
     const float outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
@@ -136,6 +139,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
 
     for (int ch = 0; ch < channelsToProcess; ++ch)
     {
+
         auto* dry = dryBuffer.getReadPointer(ch);
         auto* wet = buffer.getWritePointer(ch);
         for (int i = 0; i < numSamples; ++i)
@@ -160,11 +164,13 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         float dryRMS = 0.0f;
         float wetRMS = 0.0f;
         for (int ch = 0; ch < channelsToProcess; ++ch)
+
         {
             dryRMS += dryBuffer.getRMSLevel(ch, 0, numSamples);
             wetRMS += buffer.getRMSLevel(ch, 0, numSamples);
         }
         dryRMS /= static_cast<float> (channelsToProcess);
+
         wetRMS /= static_cast<float> (channelsToProcess);
 
         if (wetRMS > 0.0f)
