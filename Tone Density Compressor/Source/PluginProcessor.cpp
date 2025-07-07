@@ -1,13 +1,14 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
-juce::AudioBuffer<float> analysisBuffer;
+#include <foleys_gui_magic/foleys_gui_magic.h>
 //==============================================================================
 ToneDensityCompressorAudioProcessor::ToneDensityCompressorAudioProcessor()
     : AudioProcessor (BusesProperties().withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                                          .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
-      parameters (*this, nullptr, "Parameters", createParameterLayout())
+      parameters (*this, nullptr, "Parameters", createParameterLayout()),
+      magicState (*this, parameters)
 {
+    oversampler.reset();
 }
 
 ToneDensityCompressorAudioProcessor::~ToneDensityCompressorAudioProcessor()
@@ -40,8 +41,11 @@ void ToneDensityCompressorAudioProcessor::prepareToPlay (double sampleRate, int 
     *airBandFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 6000.0f);
 
     dryBuffer.setSize(getTotalNumInputChannels(), samplesPerBlock);
-    
+
     analysisBuffer.setSize(2, 512);  // Stereo, 512 samples (adjustable)
+
+    oversampler.initProcessing(samplesPerBlock);
+    oversampler.reset();
 
 }
 
@@ -57,26 +61,118 @@ bool ToneDensityCompressorAudioProcessor::isBusesLayoutSupported (const BusesLay
 void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto numSamples = buffer.getNumSamples();
+    const int totalNumInputChannels = getTotalNumInputChannels();
+    const int totalNumOutputChannels = getTotalNumOutputChannels();
+    const int channelsToProcess = juce::jmax (buffer.getNumChannels(), totalNumOutputChannels);
+    const int numSamples = buffer.getNumSamples();
     const int numSamplesToCopy = juce::jmin(buffer.getNumSamples(), 512);
 
     analysisBuffer.setSize(buffer.getNumChannels(), numSamplesToCopy);
+
+    if (totalNumInputChannels == 1 && totalNumOutputChannels >= 2)
+        buffer.copyFrom(1, 0, buffer, 0, 0, numSamples);
+
     dryBuffer.makeCopyOf(buffer);
 
-    auto lowBypass = parameters.getRawParameterValue("lowBypass")->load() > 0.5f;
-    auto midBypass = parameters.getRawParameterValue("midBypass")->load() > 0.5f;
-    auto highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
-    auto airBypass = parameters.getRawParameterValue("airBypass")->load() > 0.5f;
+    const bool lowBypass  = parameters.getRawParameterValue("lowBypass")->load()  > 0.5f;
+    const bool midBypass  = parameters.getRawParameterValue("midBypass")->load()  > 0.5f;
+    const bool highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
+    const bool airBypass  = parameters.getRawParameterValue("airBypass")->load()  > 0.5f;
 
-    auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
-    auto outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
+    const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
+    const float outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
+    const bool bypass = parameters.getRawParameterValue("bypass")->load() > 0.5f;
+    const bool autoGain = parameters.getRawParameterValue("autoGain")->load() > 0.5f;
+    const int oversampleChoice = (int) parameters.getRawParameterValue("oversampling")->load();
+    const bool midSide = parameters.getRawParameterValue("midSide")->load() > 0.5f;
 
-    for (int ch = 0; ch < totalNumInputChannels; ++ch)
+    if (midSide && totalNumInputChannels >= 2)
     {
-        buffer.applyGain(ch, 0, numSamples, outputGain);
+        for (int i = 0; i < numSamples; ++i)
+        {
+            auto L = buffer.getSample(0, i);
+            auto R = buffer.getSample(1, i);
+            buffer.setSample(0, i, 0.5f * (L + R));
+            buffer.setSample(1, i, 0.5f * (L - R));
+        }
+    }
+
+    if (! bypass)
+    {
+        if (oversampleChoice > 0)
+        {
+            juce::dsp::AudioBlock<float> block (buffer);
+            oversampler.processSamplesUp (block);
+
+            auto context = juce::dsp::ProcessContextReplacing<float> (block);
+            if (! lowBypass)
+                lowBandFilter.process (context);
+            if (! midBypass)
+                midBandFilter.process (context);
+            if (! highBypass)
+                highBandFilter.process (context);
+            if (! airBypass)
+                airBandFilter.process (context);
+
+            oversampler.processSamplesDown (block);
+        }
+        else
+        {
+            juce::dsp::AudioBlock<float> block (buffer);
+            auto context = juce::dsp::ProcessContextReplacing<float> (block);
+            if (! lowBypass)
+                lowBandFilter.process (context);
+            if (! midBypass)
+                midBandFilter.process (context);
+            if (! highBypass)
+                highBandFilter.process (context);
+            if (! airBypass)
+                airBandFilter.process (context);
+        }
+
+        for (int ch = 0; ch < channelsToProcess; ++ch)
+            buffer.applyGain(ch, 0, numSamples, outputGain);
+    }
+
+    for (int ch = 0; ch < channelsToProcess; ++ch)
+    {
+        auto* dry = dryBuffer.getReadPointer(ch);
+        auto* wet = buffer.getWritePointer(ch);
+        for (int i = 0; i < numSamples; ++i)
+            wet[i] = wet[i] * mix + dry[i] * (1.0f - mix);
+
         analysisBuffer.copyFrom(ch, 0, buffer, ch, 0, numSamplesToCopy);
     }
+
+    if (midSide && totalNumInputChannels >= 2)
+    {
+        for (int i = 0; i < numSamples; ++i)
+        {
+            auto M = buffer.getSample(0, i);
+            auto S = buffer.getSample(1, i);
+            buffer.setSample(0, i, M + S);
+            buffer.setSample(1, i, M - S);
+        }
+    }
+
+    if (autoGain && ! bypass)
+    {
+        float dryRMS = 0.0f;
+        float wetRMS = 0.0f;
+        for (int ch = 0; ch < channelsToProcess; ++ch)
+        {
+            dryRMS += dryBuffer.getRMSLevel(ch, 0, numSamples);
+            wetRMS += buffer.getRMSLevel(ch, 0, numSamples);
+        }
+        dryRMS /= static_cast<float> (channelsToProcess);
+        wetRMS /= static_cast<float> (channelsToProcess);
+
+        if (wetRMS > 0.0f)
+            buffer.applyGain(dryRMS / wetRMS);
+    }
+
+    for (int ch = channelsToProcess; ch < totalNumOutputChannels; ++ch)
+        buffer.clear(ch, 0, numSamples);
 }
 
 
@@ -85,7 +181,7 @@ bool ToneDensityCompressorAudioProcessor::hasEditor() const { return true; }
 
 juce::AudioProcessorEditor* ToneDensityCompressorAudioProcessor::createEditor()
 {
-    return new ToneDensityCompressorAudioProcessorEditor (*this);
+    return magicState.createEditor();
 }
 
 //==============================================================================
@@ -112,6 +208,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout ToneDensityCompressorAudioPr
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("mix", "Mix", 0.0f, 100.0f, 50.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("output", "Output", -24.0f, 24.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("bypass", "Bypass", false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("autoGain", "Auto Gain", false));
+    juce::StringArray osChoices { "1x", "2x", "4x" };
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("oversampling", "Oversampling", osChoices, 0));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("midSide", "Mid/Side", false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("link", "Link", false));
 
     auto addBandParams = [&params](const juce::String& prefix) {
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Sensitivity", prefix + " Sensitivity", 0.0f, 1.0f, 0.5f));
