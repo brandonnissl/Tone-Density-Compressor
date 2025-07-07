@@ -19,7 +19,7 @@ private:
     juce::Slider mixKnob;
     juce::Slider outputKnob;
     juce::ToggleButton linkButton;
-    
+
     juce::ToggleButton bypassButton;
     juce::Label mixLabel {"", "Mix"};
     juce::Label outputLabel {"", "Output"};

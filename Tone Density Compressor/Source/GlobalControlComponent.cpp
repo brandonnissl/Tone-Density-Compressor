@@ -20,7 +20,7 @@ GlobalControlComponent::GlobalControlComponent()
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(outputKnob);
     addAndMakeVisible(linkButton);
-  
+
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(mixLabel);
     addAndMakeVisible(outputLabel);
