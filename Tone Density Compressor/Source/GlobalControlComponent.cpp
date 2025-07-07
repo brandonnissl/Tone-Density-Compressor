@@ -89,7 +89,7 @@ void GlobalControlComponent::attachParameters(juce::AudioProcessorValueTreeState
         params, "midSide", midSideButton);
     linkAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         params, "link", linkButton);
-
+n
 }
 
 void GlobalControlComponent::resized()

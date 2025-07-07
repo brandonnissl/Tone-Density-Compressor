@@ -60,7 +60,6 @@ public:
     juce::AudioProcessorValueTreeState parameters;
 
 
-
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     const juce::AudioBuffer<float>& getAnalysisBuffer() const { return analysisBuffer; }
