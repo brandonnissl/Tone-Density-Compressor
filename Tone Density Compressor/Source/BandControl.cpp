@@ -26,7 +26,6 @@ BandControl::BandControl(const juce::String& name) : bandName(name)
     sensitivityLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     compressionLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     bypassLabel.setColour(juce::Label::textColourId, juce::Colours::white);
-
 }
 
 void BandControl::attachParameters(juce::AudioProcessorValueTreeState& params, const juce::String& prefix)
