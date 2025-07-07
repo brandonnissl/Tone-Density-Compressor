@@ -14,10 +14,10 @@
 class HeaderComponent : public juce::Component
 {
 public:
-    HeaderComponent() {}
+    HeaderComponent();
 
-    void paint (juce::Graphics& g) override {}
-    void resized() override {}
+    void paint (juce::Graphics& g) override;
+    void resized() override;
 
 private:
     juce::Label logoLabel;
