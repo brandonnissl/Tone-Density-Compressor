@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="i8G5jh" name="Tone Density Compressor" projectType="audioplug"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+  <MAINGROUP id="XKonvs" name="Tone Density Compressor">
+    <GROUP id="{70908B6D-E15A-5BF6-E22F-35B0CD115CE3}" name="Source">
+      <FILE id="TSEIxw" name="LookAndFeel_TDC.cpp" compile="1" resource="0"
+            file="Source/LookAndFeel_TDC.cpp"/>
+      <FILE id="SB53zl" name="LookAndFeel_TDC.h" compile="0" resource="0"
+            file="Source/LookAndFeel_TDC.h"/>
+      <FILE id="asd3lM" name="HeaderComponent.h" compile="0" resource="0"
+            file="Source/HeaderComponent.h"/>
+      <FILE id="cNFU0E" name="HeaderComponent.cpp" compile="1" resource="0"
+            file="Source/HeaderComponent.cpp"/>
+      <FILE id="NYxJ6P" name="BandControl.cpp" compile="1" resource="0" file="Source/BandControl.cpp"/>
+      <FILE id="s5QhBK" name="BandControl.h" compile="0" resource="0" file="Source/BandControl.h"/>
+      <FILE id="qxLxuO" name="BandControlComponent.cpp" compile="1" resource="0"
+            file="Source/BandControlComponent.cpp"/>
+      <FILE id="Um3YPx" name="BandControlComponent.h" compile="0" resource="0"
+            file="Source/BandControlComponent.h"/>
+      <FILE id="nOznFF" name="GlobalControlComponent.cpp" compile="1" resource="0"
+            file="Source/GlobalControlComponent.cpp"/>
+      <FILE id="YmUnb5" name="GlobalControlComponent.h" compile="0" resource="0"
+            file="Source/GlobalControlComponent.h"/>
+      <FILE id="kkpXaQ" name="IOAndDensityMeterComponent.cpp" compile="1"
+            resource="0" file="Source/IOAndDensityMeterComponent.cpp"/>
+      <FILE id="NOeMOs" name="IOAndDensityMeterComponent.h" compile="0" resource="0"
+            file="Source/IOAndDensityMeterComponent.h"/>
+      <FILE id="M5429g" name="SpectralFlatnessGraphComponent.cpp" compile="1"
+            resource="0" file="Source/SpectralFlatnessGraphComponent.cpp"/>
+      <FILE id="ZNewSZ" name="SpectralFlatnessGraphComponent.h" compile="0"
+            resource="0" file="Source/SpectralFlatnessGraphComponent.h"/>
+      <FILE id="GlTgHc" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="qyD4G6" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="MbZmnE" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="SY9VHF" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_analytics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_product_unlocking" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Tone Density Compressor"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Tone Density Compressor"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_analytics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_product_unlocking" path="../../../Downloads/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+</JUCERPROJECT>
