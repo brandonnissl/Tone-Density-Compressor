@@ -3,7 +3,7 @@
 
 //==============================================================================
 ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEditor (ToneDensityCompressorAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (p), audioProcessor (p)
 {
     setLookAndFeel(&customLookAndFeel);
 
@@ -35,7 +35,7 @@ ToneDensityCompressorAudioProcessorEditor::~ToneDensityCompressorAudioProcessorE
 //==============================================================================
 void ToneDensityCompressorAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::black);  // Dark background
+    g.fillAll (juce::Colours::grey);  // Dark background
 }
 
 void ToneDensityCompressorAudioProcessorEditor::resized()

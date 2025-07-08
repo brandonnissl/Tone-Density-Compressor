@@ -4,6 +4,8 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="XKonvs" name="Tone Density Compressor">
     <GROUP id="{70908B6D-E15A-5BF6-E22F-35B0CD115CE3}" name="Source">
+      <FILE id="sKxNBr" name="DotKnob.cpp" compile="1" resource="0" file="Source/DotKnob.cpp"/>
+      <FILE id="JjKTzL" name="DotKnob.h" compile="0" resource="0" file="Source/DotKnob.h"/>
       <FILE id="TSEIxw" name="LookAndFeel_TDC.cpp" compile="1" resource="0"
             file="Source/LookAndFeel_TDC.cpp"/>
       <FILE id="SB53zl" name="LookAndFeel_TDC.h" compile="0" resource="0"

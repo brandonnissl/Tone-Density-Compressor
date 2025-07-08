@@ -26,8 +26,8 @@ HeaderComponent::HeaderComponent()
 void HeaderComponent::paint(juce::Graphics& g)
 {
     auto bounds = getLocalBounds().toFloat();
-    juce::ColourGradient grad(juce::Colours::black, bounds.getTopLeft(),
-                              juce::Colours::darkslategrey, bounds.getBottomLeft(), false);
+    juce::ColourGradient grad(juce::Colours::darkblue, bounds.getTopLeft(),
+                              juce::Colours::black, bounds.getBottomLeft(), false);
     g.setGradientFill(grad);
     g.fillRect(bounds);
 }

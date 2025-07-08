@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DotKnob.h"  // Include your new reusable DotKnob component here
 
 class BandControl : public juce::Component
 {
@@ -14,12 +15,11 @@ public:
     void resized() override;
 
 private:
-    juce::Slider sensitivityKnob;
-    juce::Slider compressionKnob;
+    DotKnob sensitivityKnob { "Sensitivity" };   // Now using DotKnob instead of Slider
+    DotKnob compressionKnob { "Compression" };   // Same here
     juce::ToggleButton bypassButton;
-    juce::Label sensitivityLabel {"", "Sensitivity"};
-    juce::Label compressionLabel {"", "Compression"};
-    juce::Label bypassLabel {"", "Bypass"};
+    
+    juce::Label bypassLabel { "", "Bypass" };  // Keeping bypass label only, knobs already have labels inside
 
     juce::String bandName;
 
