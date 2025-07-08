@@ -17,7 +17,7 @@ SpectralFlatnessGraphComponent::SpectralFlatnessGraphComponent()
 
 void SpectralFlatnessGraphComponent::pushNewData (const juce::AudioBuffer<float>& buffer)
 {
-    auto numSamples = juce::jmin (buffer.getNumSamples(), fftSize);
+    auto numSamples = juce::jmin<float>(buffer.getNumSamples(), fftSize);
 
     const float* left  = buffer.getReadPointer (0);
     const float* right = buffer.getNumChannels() > 1 ? buffer.getReadPointer (1) : nullptr;
