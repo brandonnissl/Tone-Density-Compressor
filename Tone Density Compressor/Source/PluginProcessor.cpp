@@ -73,9 +73,10 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         buffer.copyFrom(1, 0, buffer, 0, 0, numSamples);
 
     dryBuffer.makeCopyOf(buffer);
-    preAnalysisBuffer.setSize(buffer.getNumChannels(), numSamplesToCopy);
+    const int preSamples = juce::jmin(numSamplesToCopy, preAnalysisBuffer.getNumSamples());
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        preAnalysisBuffer.copyFrom(ch, 0, buffer, ch, 0, numSamplesToCopy);
+        preAnalysisBuffer.copyFrom(ch, 0, buffer, ch, 0, preSamples);
+
 
 
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;

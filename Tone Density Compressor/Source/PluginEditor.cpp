@@ -59,6 +59,9 @@ void ToneDensityCompressorAudioProcessorEditor::resized()
     bandsControl.setBounds(bounds.removeFromTop(bandsHeight));
     globalControl.setBounds(bounds.removeFromTop(globalHeight));
     ioMeters.setBounds(bounds.removeFromTop(metersHeight));
+
+    // keep graph behind interactive controls after any resize
+    spectralGraph.toBack();
 }
 
 void ToneDensityCompressorAudioProcessorEditor::timerCallback()
