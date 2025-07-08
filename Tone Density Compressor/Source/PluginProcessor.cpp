@@ -39,11 +39,12 @@ void ToneDensityCompressorAudioProcessor::prepareToPlay (double sampleRate, int 
     *airBandFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 6000.0f);
 
     dryBuffer.setSize(getTotalNumInputChannels(), samplesPerBlock);
-
+    preAnalysisBuffer.setSize(getTotalNumInputChannels(), 512);
     analysisBuffer.setSize(2, 512);  // Stereo, 512 samples (adjustable)
 
     oversampler.initProcessing(samplesPerBlock);
     oversampler.reset();
+    currentSampleRate = sampleRate;
 
 }
 
@@ -72,6 +73,9 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         buffer.copyFrom(1, 0, buffer, 0, 0, numSamples);
 
     dryBuffer.makeCopyOf(buffer);
+    const int preSamples = juce::jmin(numSamplesToCopy, preAnalysisBuffer.getNumSamples());
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+        preAnalysisBuffer.copyFrom(ch, 0, buffer, ch, 0, preSamples);
 
 
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
@@ -193,16 +197,20 @@ juce::AudioProcessorValueTreeState::ParameterLayout ToneDensityCompressorAudioPr
     params.push_back(std::make_unique<juce::AudioParameterBool>("link", "Link", false));
 
 
-    auto addBandParams = [&params](const juce::String& prefix) {
+    auto addBandParams = [&params](const juce::String& prefix,
+                                   float defLow,
+                                   float defHigh) {
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Sensitivity", prefix + " Sensitivity", 0.0f, 1.0f, 0.5f));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "Compression", prefix + " Compression", -24.0f, 24.0f, 0.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(prefix + "Bypass", prefix + " Bypass", false));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "FreqLow", prefix + " Low Freq", 20.0f, 20000.0f, defLow));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(prefix + "FreqHigh", prefix + " High Freq", 20.0f, 20000.0f, defHigh));
     };
 
-    addBandParams("low");
-    addBandParams("mid");
-    addBandParams("high");
-    addBandParams("air");
+    addBandParams("low",   20.0f,   250.0f);
+    addBandParams("mid",   250.0f,  2000.0f);
+    addBandParams("high",  2000.0f, 6000.0f);
+    addBandParams("air",   6000.0f, 20000.0f);
 
     return { params.begin(), params.end() };
 }

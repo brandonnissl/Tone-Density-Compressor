@@ -61,6 +61,8 @@ public:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     const juce::AudioBuffer<float>& getAnalysisBuffer() const { return analysisBuffer; }
+    const juce::AudioBuffer<float>& getPreAnalysisBuffer() const { return preAnalysisBuffer; }
+    double getCurrentSampleRate() const { return currentSampleRate; }
 
 private:
     // DSP Filters for Bands
@@ -71,6 +73,9 @@ private:
 
     juce::AudioBuffer<float> dryBuffer;  // For dry/wet mixing
     juce::AudioBuffer<float> analysisBuffer; // Captures data for the spectral graph
+    juce::AudioBuffer<float> preAnalysisBuffer; // Pre-compression data for graph
+
+    double currentSampleRate = 44100.0;
 
     juce::dsp::Oversampling<float> oversampler { 2, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true };
 
