@@ -14,9 +14,11 @@ SpectralFlatnessGraphComponent::SpectralFlatnessGraphComponent()
 {
     addAndMakeVisible(prePostToggle);
     prePostToggle.setToggleState(true, juce::dontSendNotification);
+
     prePostToggle.onClick = [this] { repaint(); };
 
     setInterceptsMouseClicks(false, true);
+
 
     startTimerHz (30);
 }

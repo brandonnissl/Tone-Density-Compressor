@@ -1,10 +1,8 @@
 /*
   ==============================================================================
-
     DotKnob.cpp
     Created: 7 Jul 2025 7:55:18pm
-    Author:  Brandon Nissl
-
+    Author:  Brandon Niss
   ==============================================================================
 */
 
@@ -18,10 +16,7 @@ DotKnob::DotKnob(const juce::String& labelText, int numDots)
     slider.addListener(this);
     addAndMakeVisible(slider);
 
-    label.setJustificationType(juce::Justification::bottom);
-    auto area = getLocalBounds().reduced(10);
-    auto labelHeight = 20;
-    label.setBounds(area.removeFromTop(labelHeight));
+    label.setJustificationType(juce::Justification::centredBottom);
     addAndMakeVisible(label);
 
     startTimerHz(30);  // Smooth animation timer
@@ -61,17 +56,17 @@ void DotKnob::paint(juce::Graphics& g)
         float maxDistance = (angleEnd - angleStart) / 2.0f;
         float glowStrength = juce::jlimit(0.0f, 1.0f, 1.0f - (angleDistance / maxDistance));  // Falloff
 
-        // Glow effect (multi-dot soft glow)
         if (glowStrength > 0.05f)
         {
             g.setColour(juce::Colours::limegreen.withAlpha(0.2f * glowStrength));
             float glowSize = 20.0f * glowStrength;
             g.fillEllipse(x - glowSize * 0.5f, y - glowSize * 0.5f, glowSize, glowSize);
         }
-
-        // Dot itself
-        g.setColour(juce::Colours::dimgrey);
-        g.fillEllipse(x - 3.0f, y - 3.0f, 6.0f, 6.0f);
+        else
+        {
+            g.setColour(juce::Colours::dimgrey);
+            g.fillEllipse(x - 3.0f, y - 3.0f, 6.0f, 6.0f);
+        }
     }
 }
 
