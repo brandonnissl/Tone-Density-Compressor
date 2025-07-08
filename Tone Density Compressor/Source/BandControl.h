@@ -17,14 +17,20 @@ public:
 private:
     DotKnob sensitivityKnob { "Sensitivity" };   // Now using DotKnob instead of Slider
     DotKnob compressionKnob { "Compression" };   // Same here
+    juce::Slider freqLowSlider;
+    juce::Slider freqHighSlider;
     juce::ToggleButton bypassButton;
     
     juce::Label bypassLabel { "", "Bypass" };  // Keeping bypass label only, knobs already have labels inside
+    juce::Label lowLabel   { "", "Low" };
+    juce::Label highLabel  { "", "High" };
 
     juce::String bandName;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sensitivityAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> compressionAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> freqLowAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> freqHighAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BandControl)

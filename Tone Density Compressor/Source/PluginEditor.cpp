@@ -20,6 +20,9 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
     addAndMakeVisible(globalControl);
     addAndMakeVisible(ioMeters);
 
+    // Ensure the graph sits behind interactive controls
+    spectralGraph.toBack();
+
     // Set plugin window size
     setSize (1200, 600);
 
@@ -60,12 +63,26 @@ void ToneDensityCompressorAudioProcessorEditor::resized()
 
 void ToneDensityCompressorAudioProcessorEditor::timerCallback()
 {
-    spectralGraph.pushNewData(audioProcessor.getAnalysisBuffer());
+    if (spectralGraph.isShowingPost())
+        spectralGraph.pushNewData(audioProcessor.getAnalysisBuffer());
+    else
+        spectralGraph.pushNewData(audioProcessor.getPreAnalysisBuffer());
 
     auto low  = audioProcessor.parameters.getRawParameterValue("lowCompression")->load();
     auto mid  = audioProcessor.parameters.getRawParameterValue("midCompression")->load();
     auto high = audioProcessor.parameters.getRawParameterValue("highCompression")->load();
     auto air  = audioProcessor.parameters.getRawParameterValue("airCompression")->load();
+
+    auto ll = audioProcessor.parameters.getRawParameterValue("lowFreqLow")->load();
+    auto lh = audioProcessor.parameters.getRawParameterValue("lowFreqHigh")->load();
+    auto ml = audioProcessor.parameters.getRawParameterValue("midFreqLow")->load();
+    auto mh = audioProcessor.parameters.getRawParameterValue("midFreqHigh")->load();
+    auto hl = audioProcessor.parameters.getRawParameterValue("highFreqLow")->load();
+    auto hh = audioProcessor.parameters.getRawParameterValue("highFreqHigh")->load();
+    auto al = audioProcessor.parameters.getRawParameterValue("airFreqLow")->load();
+    auto ah = audioProcessor.parameters.getRawParameterValue("airFreqHigh")->load();
+
+    spectralGraph.setFrequencyRanges(ll, lh, ml, mh, hl, hh, al, ah, audioProcessor.getCurrentSampleRate());
 
     spectralGraph.setCompressionLevels(low, mid, high, air);
 }
