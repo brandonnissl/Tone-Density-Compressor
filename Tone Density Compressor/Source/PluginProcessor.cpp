@@ -73,10 +73,6 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
 
     dryBuffer.makeCopyOf(buffer);
 
-    auto lowBypass = parameters.getRawParameterValue("lowBypass")->load() > 0.5f;
-    auto midBypass = parameters.getRawParameterValue("midBypass")->load() > 0.5f;
-    auto highBypass = parameters.getRawParameterValue("highBypass")->load() > 0.5f;
-    auto airBypass = parameters.getRawParameterValue("airBypass")->load() > 0.5f;
 
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
     const float outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
