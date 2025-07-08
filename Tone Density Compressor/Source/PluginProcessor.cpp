@@ -78,6 +78,7 @@ void ToneDensityCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>
         preAnalysisBuffer.copyFrom(ch, 0, buffer, ch, 0, preSamples);
 
 
+
     const auto mix = parameters.getRawParameterValue("mix")->load() / 100.0f;
     const float outputGain = juce::Decibels::decibelsToGain(parameters.getRawParameterValue("output")->load());
     const bool bypass = parameters.getRawParameterValue("bypass")->load() > 0.5f;
