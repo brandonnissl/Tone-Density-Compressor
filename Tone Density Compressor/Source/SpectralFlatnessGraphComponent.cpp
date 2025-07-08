@@ -12,6 +12,8 @@
 
 SpectralFlatnessGraphComponent::SpectralFlatnessGraphComponent()
 {
+    addAndMakeVisible(prePostToggle);
+    prePostToggle.setToggleState(true, juce::dontSendNotification);
     startTimerHz (30);
 }
 
@@ -52,13 +54,39 @@ void SpectralFlatnessGraphComponent::setCompressionLevels (float low, float mid,
     compLevels[3] = air;
 }
 
+void SpectralFlatnessGraphComponent::setFrequencyRanges(float lL, float lH,
+                                                        float mL, float mH,
+                                                        float hL, float hH,
+                                                        float aL, float aH,
+                                                        double sr)
+{
+    bandLow[0] = lL;  bandHigh[0] = lH;
+    bandLow[1] = mL;  bandHigh[1] = mH;
+    bandLow[2] = hL;  bandHigh[2] = hH;
+    bandLow[3] = aL;  bandHigh[3] = aH;
+    sampleRate = sr;
+}
+
 void SpectralFlatnessGraphComponent::paint (juce::Graphics& g)
 {
     auto bounds = getLocalBounds().toFloat();
     g.setColour (juce::Colours::darkslategrey);
     g.fillRoundedRectangle (bounds, 10.0f);
 
+    bounds.removeFromTop(20.0f);
     auto graphArea = bounds.reduced (10.0f);
+
+    // Draw band ranges background
+    for (int i = 0; i < 4; ++i)
+    {
+        float x1 = graphArea.getX() + (bandLow[i]  / (float)(sampleRate * 0.5)) * graphArea.getWidth();
+        float x2 = graphArea.getX() + (bandHigh[i] / (float)(sampleRate * 0.5)) * graphArea.getWidth();
+        g.setColour(juce::Colours::whitesmoke.withAlpha(0.08f));
+        g.fillRect(juce::Rectangle<float>(x1, graphArea.getY(), x2 - x1, graphArea.getHeight()));
+        g.setColour(juce::Colours::white.withAlpha(0.2f));
+        g.drawLine(x1, graphArea.getY(), x1, graphArea.getBottom());
+        g.drawLine(x2, graphArea.getY(), x2, graphArea.getBottom());
+    }
 
     // Draw spectrum
     if (! magnitudes.empty())
@@ -95,4 +123,19 @@ void SpectralFlatnessGraphComponent::paint (juce::Graphics& g)
         g.setColour (colours[i]);
         g.drawLine (graphArea.getX(), y, graphArea.getRight(), y, 1.0f);
     }
+
+    g.setColour(juce::Colours::white);
+    g.setFont(12.0f);
+    g.drawFittedText("Frequency (Hz)", graphArea.getX(), graphArea.getBottom() + 2,
+                     graphArea.getWidth(), 15, juce::Justification::centred, 1);
+    g.addTransform(juce::AffineTransform::rotation(-juce::MathConstants<float>::halfPi,
+                                                   graphArea.getX() - 20, graphArea.getCentreY()));
+    g.drawFittedText("Amplitude (dB)", graphArea.getX() - 60, graphArea.getY(),
+                     50, graphArea.getHeight(), juce::Justification::centred, 1);
+}
+
+void SpectralFlatnessGraphComponent::resized()
+{
+    auto bounds = getLocalBounds();
+    prePostToggle.setBounds(bounds.removeFromTop(20).removeFromRight(60));
 }

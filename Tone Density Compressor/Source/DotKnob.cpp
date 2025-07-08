@@ -44,6 +44,13 @@ void DotKnob::paint(juce::Graphics& g)
     float angleStart = juce::MathConstants<float>::pi * 1.25f;
     float angleEnd = juce::MathConstants<float>::pi * 2.75f;
 
+    if (slider.isMouseOverOrDragging())
+    {
+        g.setColour(juce::Colours::limegreen.withAlpha(0.2f));
+        g.fillEllipse(center.x - radius - 6.0f, center.y - radius - 6.0f,
+                      (radius + 6.0f) * 2.0f, (radius + 6.0f) * 2.0f);
+    }
+
     for (int i = 0; i < numDots; ++i)
     {
         float angle = juce::jmap<float>(i, 0, numDots - 1, angleStart, angleEnd);
