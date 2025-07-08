@@ -20,6 +20,9 @@ ToneDensityCompressorAudioProcessorEditor::ToneDensityCompressorAudioProcessorEd
     addAndMakeVisible(globalControl);
     addAndMakeVisible(ioMeters);
 
+    // Ensure the graph sits behind interactive controls
+    spectralGraph.toBack();
+
     // Set plugin window size
     setSize (1200, 600);
 
