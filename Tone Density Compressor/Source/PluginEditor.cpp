@@ -62,4 +62,10 @@ void ToneDensityCompressorAudioProcessorEditor::timerCallback()
 {
     spectralGraph.pushNewData(audioProcessor.getAnalysisBuffer());
 
+    auto low  = audioProcessor.parameters.getRawParameterValue("lowCompression")->load();
+    auto mid  = audioProcessor.parameters.getRawParameterValue("midCompression")->load();
+    auto high = audioProcessor.parameters.getRawParameterValue("highCompression")->load();
+    auto air  = audioProcessor.parameters.getRawParameterValue("airCompression")->load();
+
+    spectralGraph.setCompressionLevels(low, mid, high, air);
 }
