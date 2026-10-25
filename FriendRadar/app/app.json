@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Friend Radar",
+    "slug": "friend-radar",
+    "scheme": "friendradar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.example.friendradar"
+    },
+    "android": {
+      "package": "com.example.friendradar",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Friend Radar uses your location to show which friends are near you.",
+          "locationAlwaysAndWhenInUsePermission": "Allow \"Always\" so Friend Radar can tell you when a friend comes near, even when the app is closed. Friends only ever see a rough distance, never your exact location.",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true,
+          "motionUsagePermission": false,
+          "locationAlwaysPermission": "Allow \"Always\" so Friend Radar can tell you when a friend comes near, even when the app is closed. Friends only ever see a rough distance, never your exact location."
+        }
+      ],
+      "expo-notifications"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
+}

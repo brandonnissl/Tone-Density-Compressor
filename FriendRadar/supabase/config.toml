@@ -1,0 +1,24 @@
+# Supabase CLI config. Unlisted settings use the CLI defaults.
+project_id = "friend-radar"
+
+[db]
+major_version = 17
+
+[auth.email]
+enable_signup = true
+# The app signs in with a 6-digit code sent by email.
+otp_length = 6
+
+[auth.email.template.magic_link]
+subject = "Your Friend Radar sign-in code"
+content_path = "./supabase/templates/magic_link.html"
+
+[functions.report-location]
+# The function checks the user's JWT itself (auth.getUser), so the gateway
+# check is not needed and would reject the newer asymmetric keys.
+verify_jwt = false
+
+# First sign-in for a new email uses the confirmation template.
+[auth.email.template.confirmation]
+subject = "Your Friend Radar sign-in code"
+content_path = "./supabase/templates/magic_link.html"
